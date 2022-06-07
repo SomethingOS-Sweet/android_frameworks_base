@@ -108,5 +108,6 @@ public class SystemSettings {
         Settings.System.BACK_GESTURE_HEIGHT,
         Settings.System.NETWORK_TRAFFIC_STATE,
         Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD,
+        Settings.System.NAVIGATION_BAR_IME_SPACE,
     };
 }
