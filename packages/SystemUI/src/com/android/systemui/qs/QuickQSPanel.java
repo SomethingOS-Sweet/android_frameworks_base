@@ -16,10 +16,12 @@
 
 package com.android.systemui.qs;
 
+import android.annotation.NonNull;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.LinearLayout;
 
@@ -29,11 +31,14 @@ import com.android.systemui.R;
 import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.plugins.qs.QSTile.SignalState;
 import com.android.systemui.plugins.qs.QSTile.State;
+import com.android.systemui.tuner.TunerService;
 
 /**
  * Version of QSPanel that only shows N Quick Tiles in the QS Header.
  */
 public class QuickQSPanel extends QSPanel {
+
+    public static final String QS_SHOW_BRIGHTNESS = "qs_show_brightness";
 
     private static final String TAG = "QuickQSPanel";
     // A fallback value for max tiles number when setting via Tuner (parseNumTiles)
@@ -54,6 +59,20 @@ public class QuickQSPanel extends QSPanel {
         mMaxColumnsPortrait = getResources().getInteger(R.integer.quick_qs_panel_num_columns);
         mMaxColumnsLandscape = getResources().getInteger(R.integer.quick_qs_panel_num_columns_landscape);
         mMaxColumnsMediaPlayer = getResources().getInteger(R.integer.quick_qs_panel_num_columns_media);
+    }
+
+    @Override
+    public void setBrightnessView(@NonNull View view) {
+        if (mBrightnessView != null) {
+            removeView(mBrightnessView);
+        }
+        mBrightnessView = view;
+        ViewGroup brightnessViewContainer = findViewById(R.id.qs_brightness_dialog);
+        if (brightnessViewContainer.indexOfChild(view) > -1) {
+            brightnessViewContainer.removeView(view);
+        }
+        brightnessViewContainer.addView(view);
+        setBrightnessViewMargin();
     }
 
     @Override
@@ -132,9 +151,8 @@ public class QuickQSPanel extends QSPanel {
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (QS_SHOW_BRIGHTNESS.equals(key)) {
-            // No Brightness or Tooltip for you!
-            super.onTuningChanged(key, "0");
+        if (QS_SHOW_BRIGHTNESS.equals(key) && mBrightnessView != null) {
+            mBrightnessView.setVisibility(VISIBLE);
         }
     }
 

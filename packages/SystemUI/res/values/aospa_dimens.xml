@@ -36,4 +36,7 @@
     <dimen name="custom_notification_row_padding">16dp</dimen>
     <dimen name="custom_qs_tile_label_line_height">20sp</dimen>
 
+    <!-- QuickQS BrightnessBar -->
+    <dimen name="new_qqs_brightness_margin_top">12dp</dimen>
+
 </resources>
