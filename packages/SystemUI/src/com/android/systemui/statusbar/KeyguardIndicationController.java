@@ -383,6 +383,7 @@ public class KeyguardIndicationController {
             R.id.keyguard_indication_text_bottom);
         mInitialTextColorState = mTopIndicationView != null
                 ? mTopIndicationView.getTextColors() : ColorStateList.valueOf(Color.WHITE);
+        mFaceIconView.setKeyguardColorState(mInitialTextColorState);
         if (mRotateTextViewController != null) {
             mRotateTextViewController.destroy();
         }
@@ -873,11 +874,13 @@ public class KeyguardIndicationController {
                 && TextUtils.equals(biometricMessageFollowUp, mBiometricMessageFollowUp)) {
             return;
         }
-        
+
         if (TextUtils.equals(biometricMessage, mContext.getString(R.string.keyguard_face_successful_unlock))) {
             mFaceIconView.setState(FaceUnlockImageView.State.SUCCESS);
         } else if (TextUtils.equals(biometricMessage, mContext.getString(R.string.keyguard_face_failed))) {
             mFaceIconView.setState(FaceUnlockImageView.State.NOT_VERIFIED);
+        } else if (TextUtils.equals(biometricMessage, mContext.getString(R.string.face_unlock_recognizing))) {
+            mFaceIconView.setState(FaceUnlockImageView.State.SCANNING);
         }
 
         mBiometricMessage = biometricMessage;
@@ -904,22 +907,18 @@ public class KeyguardIndicationController {
     }
 
     private void showFaceUnlockRecognizingMessage() {
-        mFaceIconView.setVisibility(View.VISIBLE);
-        mFaceIconView.setState(FaceUnlockImageView.State.SCANNING);
         showBiometricMessage(mContext.getResources().getString(
                                     R.string.face_unlock_recognizing));
     }
 
     private void hideFaceUnlockRecognizingMessage() {
-        if (mFaceIconView != null) {
-            mFaceIconView.setVisibility(View.GONE);
-        }
         String faceUnlockMessage = mContext.getResources().getString(
             R.string.face_unlock_recognizing);
-        if (mBiometricMessage != null && mBiometricMessage == faceUnlockMessage) {
+        if (TextUtils.equals(faceUnlockMessage, mBiometricMessage)) {
             mBiometricMessage = null;
             hideBiometricMessage();
         }
+        mFaceIconView.setState(FaceUnlockImageView.State.HIDDEN);
     }
 
     /**
