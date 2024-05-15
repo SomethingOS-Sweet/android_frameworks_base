@@ -38,7 +38,9 @@
             android:padding="@dimen/keyguard_affordance_fixed_padding"
             android:layout_gravity="center"
             android:scaleType="fitCenter"
-            android:tint="?android:attr/textColorSecondary"
+            android:tint="@android:color/white"
+	    android:background="@drawable/keyguard_bottom_affordance_bg"
+            android:foreground="@drawable/keyguard_bottom_affordance_selected_border"
             android:visibility="gone" />
 
         <com.android.systemui.statusbar.phone.KeyguardIndicationTextView
